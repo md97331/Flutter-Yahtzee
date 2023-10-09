@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mp2/models/dice.dart';
 
 class DiceWindow extends StatefulWidget {
-  final Dice dice;
-  final bool categoryPicked;
+  final Dice dice; // Dice (window)
+  final bool categoryPicked; //know if category has been picked
 
   const DiceWindow({Key? key, required this.dice, required this.categoryPicked})
       : super(key: key);
@@ -15,9 +15,10 @@ class DiceWindow extends StatefulWidget {
 class DiceWindowState extends State<DiceWindow> {
   @override
   Widget build(BuildContext context) {
+    //button (roll dice or no more rolls)
     String buttonText = (widget.dice.rolls < 3 || widget.categoryPicked)
         ? "Roll Dice"
-        : "No More Rolls"; // Define the button text
+        : "No More Rolls";
 
     return Column(
       children: [
@@ -34,11 +35,13 @@ class DiceWindowState extends State<DiceWindow> {
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Change button color here
+            backgroundColor: const Color.fromARGB(255, 255, 255, 255),
             textStyle: const TextStyle(fontSize: 16),
           ),
-          onPressed: (widget.dice.rolls < 3) ? () => rollDice() : null,
-          child: Text(buttonText), // Use the buttonText variable
+          onPressed:
+          // If the game has ended, disable the button
+          (widget.dice.rolls < 3) ? () => rollDice() : null,
+          child: Text(buttonText),
         ),
       ],
     );
@@ -52,8 +55,8 @@ class DiceWindowState extends State<DiceWindow> {
 }
 
 class DiceSquare extends StatefulWidget {
-  final int index;
-  final Dice dice;
+  final int index; //index of dice
+  final Dice dice; //dice
 
   const DiceSquare({Key? key, required this.index, required this.dice})
       : super(key: key);
@@ -68,7 +71,8 @@ class DiceSquareState extends State<DiceSquare> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          widget.dice.rollHistory.isNotEmpty?widget.dice.toggleHold(widget.index):null;
+          //toggle hold
+          widget.dice.rollHistory.isNotEmpty ? widget.dice.toggleHold(widget.index) : null;
         });
       },
       child: Container(
@@ -77,8 +81,8 @@ class DiceSquareState extends State<DiceSquare> {
         decoration: BoxDecoration(
           color: widget.dice.isHeld(widget.index)
               ? const Color.fromARGB(255, 204, 184, 2)
-              : const Color.fromARGB(255, 162, 162, 162), // Change square color here
-          borderRadius: BorderRadius.circular(10), // Add some border radius
+              : const Color.fromARGB(255, 162, 162, 162),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(

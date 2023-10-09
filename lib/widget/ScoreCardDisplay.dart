@@ -3,20 +3,21 @@ import 'package:mp2/models/dice.dart';
 import 'package:mp2/models/scorecard.dart';
 
 class ScoreCardView extends StatelessWidget {
-  final ScoreCard scoreCard;
-  final Dice dice;
-  final VoidCallback onTurnEnd;
-  final bool categoryPicked;
-  final Function(bool) updateGameEnded;
-  final bool gameEnded; // Add gameEnded as a parameter
+  final ScoreCard scoreCard; //scorecard
+  final Dice dice; // Dice (window)
+  final VoidCallback onTurnEnd; //function to call when turn ends
+  final bool categoryPicked; //know if category has been picked
+  final Function(bool) updateGameEnded; //update game ended
+  final bool gameEnded; //know if game has ended
 
   const ScoreCardView({super.key, 
+    Key? lkey,
     required this.scoreCard,
     required this.dice,
     required this.onTurnEnd,
     required this.categoryPicked,
     required this.updateGameEnded,
-    required this.gameEnded, // Add gameEnded as a named parameter
+    required this.gameEnded,
   });
 
   @override
@@ -76,20 +77,21 @@ class ScoreCardView extends StatelessWidget {
 }
 
 class ScoreCardTile extends StatefulWidget {
-  final ScoreCategory category;
-  final ScoreCard scoreCard;
-  final Dice dice;
-  final VoidCallback onPick;
-  final Function(bool) updateGameEnded;
-  final bool gameEnded; // Add gameEnded as a parameter
+  final ScoreCategory category; //category
+  final ScoreCard scoreCard; //scorecard
+  final Dice dice; // Dice (window)
+  final VoidCallback onPick;  //function to call when category is picked
+  final Function(bool) updateGameEnded; //update game ended
+  final bool gameEnded; //know if game has ended
 
   const ScoreCardTile({super.key, 
+    Key? lkey,
     required this.category,
     required this.scoreCard,
     required this.dice,
     required this.onPick,
     required this.updateGameEnded,
-    required this.gameEnded, // Add gameEnded as a named parameter
+    required this.gameEnded,
   });
 
   @override
@@ -100,8 +102,8 @@ class ScoreCardTileState extends State<ScoreCardTile> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3, // Add some elevation for a card-like effect
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), // Add some margin
+      elevation: 3,
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         title: Text(
           widget.category.name,
@@ -112,31 +114,30 @@ class ScoreCardTileState extends State<ScoreCardTile> {
                 widget.scoreCard[widget.category].toString(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.green, // Change color for picked categories
+                  color: Colors.green,
                 ),
               )
             : ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 158, 158, 158), // Change button color here
+                  backgroundColor: const Color.fromARGB(255, 158, 158, 158),
                   textStyle: const TextStyle(fontSize: 12),
                 ),
                 onPressed: () {
-                  widget.updateGameEnded(
-                      false); // Call the callback without arguments
+                  widget.updateGameEnded(false);
                   if (widget.gameEnded == false &&
                       widget.dice.rolls > 0 &&
                       !widget.scoreCard.isCategoryPicked(widget.category)) {
                     widget.onPick();
-                    widget.dice.clear(); // Clear the dice rolls
+                    widget.dice.clear();
 
                     bool allCategoriesPicked = ScoreCategory.values.every(
-                        (category) =>
-                            widget.scoreCard.isCategoryPicked(category) ||
-                            widget.scoreCard[category] != null);
+                      (category) =>
+                          widget.scoreCard.isCategoryPicked(category) ||
+                          widget.scoreCard[category] != null,
+                    );
 
                     if (allCategoriesPicked) {
-                      widget.updateGameEnded(
-                          true); // Call the callback function to update gameEnded
+                      widget.updateGameEnded(true);
                     }
                   }
                 },
